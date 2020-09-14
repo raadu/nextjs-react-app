@@ -1,23 +1,40 @@
 import Link from 'next/link';
+import {useEffect, useState} from 'react';
 
-const people = [
-    {vehicle: "car", name: "bruno"},
-    {vehicle: "bike", name: "john"},
-    {vehicle: "rickshaw", name: "momin"},
-]
+function Details({peopleList}) {
+    // const [people, setPeople] = useState([]);
 
-function Details() {
+    // useEffect(() => {
+    //     async function loadData() {
+    //         const response = await fetch('http://localhost:4001/vehicles');
+    //         const peoplelist = await response.json();
+    //         setPeople(peoplelist);
+    //     }
+
+    //     loadData();
+    // }, []);
+
     return(
         <div>
-            {people.map((e) => (
-                <div>
-                    <Link as={`/${e.vehicle}/${e.name}`} href="/[Vehicle]/[person]">
-                        <a>Navigate to {e.name}'s {e.vehicle}</a>
+            {peopleList.map((e, index) => (
+                <div key={index}>
+                    <Link 
+                        as={`/${e.vehicle}/${e.ownerName}`} 
+                        href="/[Vehicle]/[person]"
+                    >
+                        <a>Navigate to {e.ownerName}'s {e.vehicle}</a>
                     </Link>
                 </div>
             ))}
         </div>
     );
+}
+
+Details.getInitialProps = async () => {
+    const response = await fetch('http://localhost:4001/vehicles');
+    const peopleList = await response.json();
+
+    return {peopleList: peopleList}
 }
 
 export default Details;
